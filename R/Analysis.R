@@ -16,7 +16,6 @@ library(ggplot2)
 library(scales)
 library(xtable)
 
-
 source("R/functions.R")
 
 ###########
