@@ -76,7 +76,8 @@ PltMean <- function(data, ...){
                linetype = "dashed", 
                col = "black") +
     scale_x_date(breaks= date_breaks("2 month"),
-                 labels = date_format("%b-%y")) +
+                 labels = date_format("%b-%y"), 
+                 limits = c(as.Date("2012-08-15"), as.Date("2013-06-15"))) +
     theme(axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1))
 }
 
