@@ -45,9 +45,10 @@ Crt_SmryDF <- function(data, val = "value"){
 PltMean <- function(data, ...){
   
   # change variable level labels for plot labelling
+  vars <- c("CBH", "BG", "NAG", "AP")
   data$variable <- factor(data$variable, 
                           levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
-                          labels = c("CBH", "BG", "NAG", "AP"))
+                          labels = vars)
   
   ylabs <- c(expression(CBH~(mu*mol~h^"-1"~g^"-1")), 
              expression(BG~(mu*mol~h^"-1"~g^"-1")),
@@ -58,9 +59,8 @@ PltMean <- function(data, ...){
   
   # create ylab according to variable
   # when plotting multiple variables at the same time
-  vars <- c("cello.act", "gluco.act", "nag.act", "phos.act")
   if(length(unique(data$variable)) > 1) 
-    ylab <- expression(Potentail~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
+    ylab <- expression(Potential~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
       # only one variable
       for (i in 1:4){
         if(unique(data$variable) == vars[i]) ylab  <- ylabs[[i]]
@@ -146,9 +146,10 @@ coefDF <- function(data){
 pltReg <- function(data){
   
   # change variable level labels for plot labelling
+  vars <- c("CBH", "BG", "NAG", "AP")
   data$variable <- factor(data$variable, 
                           levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
-                          labels = c("CBH", "BG", "NAG", "AP"))
+                          labels = vars)
   # regression sumamry DF
   regSmDF <- ddply(data, .(variable), regrDF)
   coefSmfDF <- ddply(data, .(variable), coefDF)
@@ -161,9 +162,8 @@ pltReg <- function(data){
   
   # create ylab according to variable
   # when plotting multiple variables at the same time
-  vars <- c("cello.act", "gluco.act", "nag.act", "phos.act" )
   if(length(unique(data$variable)) > 1) 
-    ylab <- expression(Potentail~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
+    ylab <- expression(Potential~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
       # only one variable
       for (i in 1:4){
         if(unique(data$variable) == vars[i]) ylab  <- ylabs[[i]]
