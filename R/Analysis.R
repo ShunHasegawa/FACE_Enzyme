@@ -1,3 +1,41 @@
+rm(list = ls(all = TRUE))
+
+library(car)
+library(gmodels)
+library(lme4)
+library(lubridate)
+library(MASS)
+library(nlme)
 library(packrat)
-status()
-bootstrap
+library(plyr)
+library(reshape)
+library(xlsx)
+library(contrast)
+library(effects)
+library(ggplot2)
+library(scales)
+library(xtable)
+
+
+source("R/functions.R")
+
+###########
+# Process #
+###########
+enz <- read.csv("Data//FACE_enzyme.csv", colClasses= c("ring" = "factor", "plot" = "factor"))
+
+# CO2
+enz$co2 <- factor(ifelse(enz$ring %in% c(1, 4, 5), "elev", "amb"))
+
+# Date
+enz$Date <- as.Date(recode(enz$dates, "'dec12' = '2012-12-11'; 
+                                        'jun13' = '2013-06-11' ;
+                                        'mar13' = '2013-03-11' ; 
+                                        'sep12' = '2012-09-03'"))
+# change unit
+enz[c("cello.act", "gluco.act", "nag.act", "phos.act")] <- enz[c("cello.act", "gluco.act", "nag.act", "phos.act")]/1000
+
+#######################
+# Summary excel table #
+#######################
+source("R/SummaryExlTable.R")
