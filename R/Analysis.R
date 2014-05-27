@@ -35,6 +35,16 @@ enz$Date <- as.Date(recode(enz$dates, "'dec12' = '2012-12-11';
 # change unit
 enz[c("cello.act", "gluco.act", "nag.act", "phos.act")] <- enz[c("cello.act", "gluco.act", "nag.act", "phos.act")]/1000
 
+#plot mean
+enzy <- ddply(enz, .(dates, Date, co2, ring, plot), 
+              function(x) colMeans(x[c("cello.act", "gluco.act", "nag.act", "phos.act")], na.rm = TRUE))
+
+# soil variable
+soil <- read.table("Data//FACE_enzyme_SoilVar.txt", header = T, colClasses = c("ring" = "factor", "plot" = "factor"))
+
+# merge soil variable with plot mean enzyme data
+enzy <- merge(enzy, soil, by.x = c("dates", "ring", "plot"), by.y = c("date", "ring", "plot"))
+
 #######################
 # Summary excel table #
 #######################
