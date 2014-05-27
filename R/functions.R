@@ -49,20 +49,21 @@ PltMean <- function(data, ...){
                           levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
                           labels = c("CBH", "BG", "NAG", "AP"))
   
-  ylabs <- c(expression(CBH~(mu*g~h^"-1"~g^"-1")), 
-             expression(BG~(mu*g~h^"-1"~g^"-1")),
-             expression(NAG~(mu*g~h^"-1"~g^"-1")),
-             expression(AP~(mu*g~h^"-1"~g^"-1")))
+  ylabs <- c(expression(CBH~(mu*mol~h^"-1"~g^"-1")), 
+             expression(BG~(mu*mol~h^"-1"~g^"-1")),
+             expression(NAG~(mu*mol~h^"-1"~g^"-1")),
+             expression(AP~(mu*mol~h^"-1"~g^"-1")))
   
   # atop: put the 1st argument on top of the 2nd
   
   # create ylab according to variable
   # when plotting multiple variables at the same time
+  vars <- c("cello.act", "gluco.act", "nag.act", "phos.act")
   if(length(unique(data$variable)) > 1) 
-    ylab <- expression(Potentail~enzyme~activity~(mu*g~h^"-1"~g^"-1")) else {
+    ylab <- expression(Potentail~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
       # only one variable
       for (i in 1:4){
-        if(unique(data$variable) == levels(data$variable)[i]) ylab  <- ylabs[[i]]
+        if(unique(data$variable) == vars[i]) ylab  <- ylabs[[i]]
       }
     }
   
@@ -102,18 +103,91 @@ PltCO2Mean <- function(data){
     scale_color_manual(values = c("blue", "red"), 
                        expression(CO[2]~trt),
                        labels = c("Ambient", expression(eCO[2])))
-  
-  # add asterisk on NH graphs at co3 treatments
-  if(!any(unique(data$variable) == "nh")) p else{
-    newDF <- subset(data, time %in% c(3, 7) & variable == "nh") # the times and variable where "*" is placed
-    ant_pos <- ddply(newDF, .(date, variable), summarise, Mean = max(Mean + SE)) #y position of "*"
-    ant_pos$lab <- "*"
-    ant_pos$temp <- factor("amb", levels=c("amb", "elve")) 
-    # the original data frame uses "temp", so it needs to have "temp" as well in ggplot2
-    # but it doesn't really do anything    
-    p +  geom_text(data = ant_pos, aes(x =date, y = Mean, label= lab), col = "black", vjust = 0)
-  }
 }
+
+#########################################
+# Plot regression line against moisture #
+#########################################
+
+# regression and get coefs and predicted values 
+
+regrDF <- function(data){
+  # regression and get coefficients and R^2
+  rgr<-aov(log(value) ~ I(moisture^(1/3)), data)
+  
+  regrDF <- data.frame(
+    xv = xv <- seq(0.015, 0.2, 0.001),
+    yv = exp(coef(rgr)[1] + coef(rgr)[2] * xv^(1/3))
+  )
+  return(regrDF)
+}
+
+coefDF <- function(data){
+  # regression and get coefficients and R^2
+  rgr<-aov(log(value) ~ I(moisture^(1/3)), data)
+  
+  # coefficient and sqare-R
+  a <- round(coef(rgr)[1], 2)
+  b <- round(coef(rgr)[2], 2)
+  r <- round(summary.lm(rgr)$r.squared, 2)
+  
+  Eqlab <- as.character(ifelse(b < 0, paste("y == exp(", a, "+", -b, "*x^(1/3))"), 
+                               paste("y == exp(", a, "-", b, "*x^(1/3))")))
+  Rlab <- paste("R^2 ==", r)
+  
+  coefDF <- data.frame(
+    labels = c(Eqlab, Rlab),
+    Max = max(data$value),
+    xv = max(data$moisture)
+  )
+  return(coefDF)
+}
+
+pltReg <- function(data){
+  
+  # change variable level labels for plot labelling
+  data$variable <- factor(data$variable, 
+                          levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
+                          labels = c("CBH", "BG", "NAG", "AP"))
+  # regression sumamry DF
+  regSmDF <- ddply(data, .(variable), regrDF)
+  coefSmfDF <- ddply(data, .(variable), coefDF)
+  
+  # ylables
+  ylabs <- c(expression(CBH~(mu*mol~h^"-1"~g^"-1")), 
+             expression(BG~(mu*mol~h^"-1"~g^"-1")),
+             expression(NAG~(mu*mol~h^"-1"~g^"-1")),
+             expression(AP~(mu*mol~h^"-1"~g^"-1")))
+  
+  # create ylab according to variable
+  # when plotting multiple variables at the same time
+  vars <- c("cello.act", "gluco.act", "nag.act", "phos.act" )
+  if(length(unique(data$variable)) > 1) 
+    ylab <- expression(Potentail~enzyme~activity~(mu*mol~h^"-1"~g^"-1")) else {
+      # only one variable
+      for (i in 1:4){
+        if(unique(data$variable) == vars[i]) ylab  <- ylabs[[i]]
+      }
+    }
+  
+  p <- ggplot(data, aes(x = moisture, y = value))
+  p2 <- p + geom_point(aes(col = co2)) +
+    scale_color_manual(values = c("blue", "red"), 
+                       expression(CO[2]~trt), 
+                       labels = c("Ambient", expression(eCO[2]))) +
+    geom_line(aes(x = xv, y = yv), data = regSmDF) +
+    geom_text(aes(x = xv, 
+                  y = Max * 0.9, 
+                  label = labels), 
+              parse = TRUE, 
+              hjust = 1,
+              vjust = c(0, 1),
+              size = 3,
+              data = coefSmfDF) +
+    labs(x = "Soil moisture", y = ylab)
+  return(p2)
+}
+
 
 ##############################
 # Save ggplot in PDF and PNG #
@@ -129,4 +203,11 @@ ggsavePP <- function(filename, plot, width, height){
          width = width, 
          height = height, 
          dpi = 600)
+}
+
+#########################
+# subset and droplevels #
+#########################
+subsetD <-  function(...){
+  droplevels(subset(...))
 }
