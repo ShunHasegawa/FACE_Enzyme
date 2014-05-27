@@ -49,3 +49,8 @@ enzy <- merge(enzy, soil, by.x = c("dates", "ring", "plot"), by.y = c("date", "r
 # Summary excel table #
 #######################
 source("R/SummaryExlTable.R")
+
+########
+# Figs #
+########
+source("R/Figs.R")
