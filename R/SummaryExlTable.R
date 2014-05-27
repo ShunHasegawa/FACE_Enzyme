@@ -1,7 +1,3 @@
-#plot mean
-enzy <- ddply(enz, .(Date, co2, ring, plot), 
-              function(x) colMeans(x[c("cello.act", "gluco.act", "nag.act", "phos.act")], na.rm = TRUE))
-
 # melt dataset
 enzMlt <- melt(enzy, id = names(enzy)[which(!(names(enzy) %in% c("cello.act", "gluco.act", "nag.act", "phos.act")))])
 
