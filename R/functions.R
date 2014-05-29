@@ -177,14 +177,14 @@ pltReg <- function(data){
                        expression(CO[2]~trt), 
                        labels = c("Ambient", expression(eCO[2]))) +
     geom_line(aes(x = xv, y = yv), data = regSmDF) +
-    geom_text(aes(x = xv, 
-                  y = Max * 0.9, 
-                  label = labels), 
-              parse = TRUE, 
-              hjust = 1,
-              vjust = c(0, 1),
-              size = 3,
-              data = coefSmfDF) +
+#     geom_text(aes(x = xv, 
+#                   y = Max * 0.9, 
+#                   label = labels), 
+#               parse = TRUE, 
+#               hjust = 1,
+#               vjust = c(0, 1),
+#               size = 3,
+#               data = coefSmfDF) +
     labs(x = "Soil moisture", y = ylab)
   return(p2)
 }
