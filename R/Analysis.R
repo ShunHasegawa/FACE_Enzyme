@@ -15,6 +15,7 @@ library(effects)
 library(ggplot2)
 library(scales)
 library(xtable)
+library(gridExtra)
 
 source("R/functions.R")
 
