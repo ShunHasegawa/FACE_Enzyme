@@ -22,13 +22,17 @@ l_ply(1:4, function(x) ggsavePP(filename = fls[x], plot = TrtFg[[x]], width = 6,
 ##################################
 # plot all enzymes in one graph #
 ##################################
-# labels for facet_grid
-ylab_label <- function(variable, value){
-  return(ylabs[value])
-}
-
-pl <- PltCO2Mean(TrtMean) +
+p <- PltCO2Mean(TrtMean) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
+
+# modify labels
+ylabs <- c(expression(beta-D-Cellobiohydrolase),
+           expression(beta-Glucosidase), 
+           expression(N-acetylglucosaminidase),
+           expression(Acid~phosphatase))
+
+pl <- facet_wrap_labeller(p, labels = ylabs)
+
 ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, height = 4)
 
 #########################################
@@ -38,8 +42,12 @@ RegFg <- dlply(enzMlt,. (variable), pltReg)
 fls <- paste("Output//Figs/FACE_Enzyme_RegreMoist_", vars, sep = "")
 l_ply(1:4, function(x) ggsavePP(filename = fls[x], plot = RegFg[[x]], width = 6, height = 3))
 
-pl <- pltReg(enzMlt) +
+p <- pltReg(enzMlt) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
+
+# modify labels
+pl <- facet_wrap_labeller(p, labels = ylabs)
+
 ggsavePP(filename = "output//figs/FACE_Enzyme_RgreMoist", plot = pl, width = 6, height = 4)
 
 
