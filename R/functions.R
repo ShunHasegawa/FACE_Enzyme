@@ -45,15 +45,19 @@ Crt_SmryDF <- function(data, val = "value"){
 PltMean <- function(data, ...){
   
   # change variable level labels for plot labelling
-  vars <- c("CBH", "BG", "NAG", "AP")
+  vars <- c(expression(beta-D-Cellobiohydrolase),
+            expression(beta-Glucosidase), 
+            expression(N-acetylglucosaminidase),
+            expression(Acid~phosphatase))
+  
   data$variable <- factor(data$variable, 
                           levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
                           labels = vars)
   
-  ylabs <- c(expression(CBH~(mu*mol~h^"-1"~g^"-1")), 
-             expression(BG~(mu*mol~h^"-1"~g^"-1")),
-             expression(NAG~(mu*mol~h^"-1"~g^"-1")),
-             expression(AP~(mu*mol~h^"-1"~g^"-1")))
+  ylabs <- c(expression(beta-D-Cellobiohydrolase~(mu*mol~h^"-1"~g^"-1")), 
+             expression(beta-Glucosidase~(mu*mol~h^"-1"~g^"-1")),
+             expression(N-acetylglucosaminidase~(mu*mol~h^"-1"~g^"-1")),
+             expression(Acid~phosphatase~(mu*mol~h^"-1"~g^"-1")))
   
   # atop: put the 1st argument on top of the 2nd
   
@@ -147,7 +151,13 @@ coefDF <- function(data){
 pltReg <- function(data){
   
   # change variable level labels for plot labelling
-  vars <- c("CBH", "BG", "NAG", "AP")
+  vars <- c(expression(beta-D-Cellobiohydrolase),
+            expression(beta-Glucosidase), 
+            expression(N-acetylglucosaminidase),
+            expression(Acid~phosphatase))
+  
+  
+  
   data$variable <- factor(data$variable, 
                           levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
                           labels = vars)
@@ -156,10 +166,10 @@ pltReg <- function(data){
   coefSmfDF <- ddply(data, .(variable), coefDF)
   
   # ylables
-  ylabs <- c(expression(CBH~(mu*mol~h^"-1"~g^"-1")), 
-             expression(BG~(mu*mol~h^"-1"~g^"-1")),
-             expression(NAG~(mu*mol~h^"-1"~g^"-1")),
-             expression(AP~(mu*mol~h^"-1"~g^"-1")))
+  ylabs <- c(expression(beta-D-Cellobiohydrolase~(mu*mol~h^"-1"~g^"-1")), 
+             expression(beta-Glucosidase~(mu*mol~h^"-1"~g^"-1")),
+             expression(N-acetylglucosaminidase~(mu*mol~h^"-1"~g^"-1")),
+             expression(Acid~phosphatase~(mu*mol~h^"-1"~g^"-1")))
   
   # create ylab according to variable
   # when plotting multiple variables at the same time
@@ -211,4 +221,26 @@ ggsavePP <- function(filename, plot, width, height){
 #########################
 subsetD <-  function(...){
   droplevels(subset(...))
+}
+
+
+facet_wrap_labeller <- function(gg.plot,labels=NULL) {
+  #works with R 3.0.1 and ggplot2 0.9.3.1
+  # copied from http://stackoverflow.com/questions/19282897/
+  # how-to-add-expressions-to-labels-in-facet-wrap
+  # require(gridExtra)
+  
+  g <- ggplotGrob(gg.plot)
+  gg <- g$grobs      
+  strips <- grep("strip_t", names(gg))
+  
+  for(ii in seq_along(labels))  {
+    modgrob <- getGrob(gg[[strips[ii]]], "strip.text", 
+                       grep=TRUE, global=TRUE)
+    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob,label=labels[ii])
+  }
+  
+  g$grobs <- gg
+  class(g) = c("arrange", "ggplot",class(g)) 
+  g
 }
