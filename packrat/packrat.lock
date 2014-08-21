@@ -1,6 +1,6 @@
-PackratFormat: 1.3
-PackratVersion: 0.3.0
-RVersion: 3.1.0
+PackratFormat: 1.4
+PackratVersion: 0.4.0.12
+RVersion: 3.1.1
 Repos: CRAN=http://cran.rstudio.com,
     CRANextra=http://www.stats.ox.ac.uk/pub/RWin
 
@@ -29,7 +29,7 @@ Requires: rms
 Package: devtools
 Source: CRAN
 Version: 1.5
-Requires: digest, evaluate, httr, memoise, RCurl, whisker
+Requires: digest, whisker, RCurl, memoise, evaluate, httr
 
 Package: dichromat
 Source: CRAN
@@ -65,12 +65,12 @@ Requires: gtools
 Package: ggplot2
 Source: CRAN
 Version: 0.9.3.1
-Requires: digest, gtable, MASS, plyr, proto, reshape2, scales
+Requires: digest, gtable, MASS, proto, plyr, reshape2, scales
 
 Package: gmodels
 Source: CRAN
 Version: 2.15.4.1
-Requires: gdata, MASS
+Requires: MASS, gdata
 
 Package: gtable
 Source: CRAN
@@ -87,7 +87,7 @@ Version: 0.3
 Package: Hmisc
 Source: CRAN
 Version: 3.14-4
-Requires: cluster, Formula, lattice, latticeExtra, survival
+Requires: cluster, Formula, lattice, survival, latticeExtra
 
 Package: htmltools
 Source: CRAN
@@ -97,7 +97,12 @@ Requires: digest
 Package: httr
 Source: CRAN
 Version: 0.3
-Requires: digest, RCurl, stringr
+Requires: digest, stringr, RCurl, jsonlite
+
+Package: jsonlite
+Source: CRAN
+Version: 0.9.10
+Hash: 6e69e79691b668042c7f022bb680bba5
 
 Package: knitr
 Source: CRAN
@@ -120,12 +125,12 @@ Requires: lattice, RColorBrewer
 Package: lme4
 Source: CRAN
 Version: 1.1-6
-Requires: lattice, MASS, Matrix, minqa, nlme, Rcpp, RcppEigen
+Requires: lattice, MASS, Rcpp, Matrix, nlme, minqa, RcppEigen, nloptr
 
 Package: lubridate
 Source: CRAN
 Version: 1.3.3
-Requires: memoise, plyr, stringr
+Requires: stringr, memoise, plyr
 
 Package: markdown
 Source: CRAN
@@ -165,6 +170,10 @@ Source: CRAN
 Version: 3.1-117
 Requires: lattice
 
+Package: nloptr
+Source: CRAN
+Version: 1.0.4
+
 Package: nnet
 Source: CRAN
 Version: 7.3-8
@@ -197,7 +206,7 @@ Version: 0.11.1
 Package: RcppEigen
 Source: CRAN
 Version: 0.3.2.1.1
-Requires: Matrix, Rcpp
+Requires: Rcpp, Matrix
 
 Package: RCurl
 Source: CRAN
@@ -212,7 +221,7 @@ Requires: plyr
 Package: reshape2
 Source: CRAN
 Version: 1.4
-Requires: plyr, Rcpp, stringr
+Requires: Rcpp, stringr, plyr
 
 Package: rJava
 Source: CRAN
@@ -230,12 +239,12 @@ GithubSha1: f4a8326cd1abb349d6959f20fdb01f1aac729746
 Package: rms
 Source: CRAN
 Version: 4.2-0
-Requires: Hmisc, SparseM, survival
+Requires: SparseM, survival, Hmisc
 
 Package: scales
 Source: CRAN
 Version: 0.2.4
-Requires: dichromat, labeling, munsell, plyr, RColorBrewer
+Requires: dichromat, labeling, RColorBrewer, munsell, plyr
 
 Package: SparseM
 Source: CRAN
