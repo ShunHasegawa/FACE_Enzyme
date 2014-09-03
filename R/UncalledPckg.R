@@ -1,3 +1,3 @@
-library(knitr)
-library(devtools)
-library(testthat) # installed when packrat is installed
+extlib(knitr)
+extlib(devtools)
+extlib(markdown)
