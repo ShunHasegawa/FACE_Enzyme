@@ -49,7 +49,10 @@ df$variable <- factor(df$variable,
                       labels = vars)
 
 # create data frame for fig sub labels
-df$subLab <- factor(df$variable, labels = LETTERS[1:length(levels(df$variable))])
+subLabDF <- data.frame(xv = as.Date("2012-08-15"),
+                       ddply(df, .(variable), summarise, yv = max(Mean + SE)),
+                       labels = LETTERS[1:length(levels(df$variable))],
+                       co2 = "amb")
 
 p <- ggplot(df, aes(x = Date, y = Mean, group = co2))
 
@@ -69,19 +72,14 @@ p2 <- p + geom_line(aes(linetype = co2)) +
                     labels = c("Ambient", expression(eCO[2]))) +
   scale_linetype_manual(values = c("solid", "dashed"), 
                         labels = c("Ambient", expression(eCO[2]))) +
+  geom_text(aes(x = xv, y = yv * .95, label = labels),
+            family = "Helvetica",
+            fontface = "bold",
+            data = subLabDF) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y") +
-  geom_text(aex(x = as.Date("2012-08-15"), y = ))
   science_theme
 ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", plot = p2, 
          width = 6, height = 5)
-
-
-
-# white-black figure
-WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme){
-  return(p2)
-}
-
 
 
 #########################################
