@@ -48,6 +48,9 @@ df$variable <- factor(df$variable,
                       levels = c("cello.act", "gluco.act", "nag.act", "phos.act"), 
                       labels = vars)
 
+# create data frame for fig sub labels
+df$subLab <- factor(df$variable, labels = LETTERS[1:length(levels(df$variable))])
+
 p <- ggplot(df, aes(x = Date, y = Mean, group = co2))
 
 p2 <- p + geom_line(aes(linetype = co2)) + 
@@ -67,6 +70,7 @@ p2 <- p + geom_line(aes(linetype = co2)) +
   scale_linetype_manual(values = c("solid", "dashed"), 
                         labels = c("Ambient", expression(eCO[2]))) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y") +
+  geom_text(aex(x = as.Date("2012-08-15"), y = ))
   science_theme
 ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", plot = p2, 
          width = 6, height = 5)
