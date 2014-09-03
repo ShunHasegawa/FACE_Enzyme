@@ -73,7 +73,6 @@ p2 <- p + geom_line(aes(linetype = co2)) +
   scale_linetype_manual(values = c("solid", "dashed"), 
                         labels = c("Ambient", expression(eCO[2]))) +
   geom_text(aes(x = xv, y = yv * .95, label = labels),
-            family = "Helvetica",
             fontface = "bold",
             data = subLabDF) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y") +
