@@ -352,3 +352,46 @@ StatPositionDF <- function(StatRes, variable, ytop, ylength, gap = .07){
   d3$co2 <- "amb" # co2 column is required for ggplot
   return(d3)
 }
+
+##################################################
+# compute mean of soil variable for given period #
+##################################################
+SoilPeriodMean <- function(data, rings, plots, Start, End){
+  sDF <- subset(data, Date >= Start & Date <= End & ring == rings & plot == plots)
+  colMeans(sDF[c("Moist", "Temp_Mean", "Temp_Min", "Temp_Max")], na.rm = TRUE)
+}
+
+# Apply the above function to data frame and merge
+SoilVarPeriMean <- function(data, period, SoilData){ 
+  # period = number of days to back from sampling date to get average soil vars
+  df <- ddply(data, .(date, ring, plot),
+              function(x) SoilPeriodMean(
+                data = SoilData, 
+                Start = x$date - period,
+                End = x$date, 
+                rings = x$ring, 
+                plot = x$plot))
+  merge(data, df, by = c("date", "ring", "plot"))
+}
+
+###############################################
+# Run lmer for each data frame and return AIC #
+###############################################
+LmrAicComp <- function(ListDF, formula){
+  # lmer test for each data set
+  LstLmrs <- llply(ListDF, 
+                   function(x) lmer(formula, data = x),
+                   .progress = "text")
+  names(LstLmrs) <- names(ListDF)
+  
+  # plot AIC
+  aicDF <- ldply(LstLmrs, AIC)
+  names(aicDF) <- c("period", "AICs")
+  plot(AICs ~ period, data = aicDF, xlab = "N of Days back from sampling")
+  
+  
+  # lmer for the lowest aic
+  df <- ListDF[[which(aicDF$AICs == min(aicDF$AICs))]]
+  Iml <- lmer(formula, data = df)
+  return(list("Initial" = Iml, "Data" = df, "AICdf" = aicDF))
+}
