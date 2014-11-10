@@ -2,7 +2,7 @@
 # Create a summary table #
 ##########################
 CreateTable <- function(dataset, fac, ...){
-  a <- dataset[c("Date", fac, "value")] #extract required columns
+  a <- dataset[c("date", fac, "value")] #extract required columns
   colnames(a) <- c("date","variable","value") #change column names for cast
   means <- cast(a, date~variable, mean, na.rm = TRUE) 
   ses <- cast(a,date~variable,function(x) ci(x,na.rm=TRUE)[4])
@@ -67,7 +67,7 @@ PltMean <- function(data, ...){
       }
     }
   
-  p <- ggplot(data, aes_string(x = "Date", y = "Mean", ...))
+  p <- ggplot(data, aes_string(x = "date", y = "Mean", ...))
   
   p2 <- p + geom_line(size = 1) + 
     geom_errorbar(aes_string(ymin = "Mean - SE", ymax = "Mean + SE", ...), width = 5) + 

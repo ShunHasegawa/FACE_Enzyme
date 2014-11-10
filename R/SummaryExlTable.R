@@ -3,7 +3,7 @@ enzMlt <- melt(enzy, id = names(enzy)[which(!(names(enzy) %in% c("cello.act", "g
 
 # Ring summary table & mean
 RngSmmryTbl <- dlply(enzMlt, .(variable), function(x) CreateTable(x, fac = "ring", digit = 4, nsmall = 4))
-RngMean <- ddply(enzMlt, .(Date, co2, ring, variable), summarise, value = mean(value, na.rm = TRUE)) 
+RngMean <- ddply(enzMlt, .(date, co2, ring, variable), summarise, value = mean(value, na.rm = TRUE)) 
 
 # treat summary table $ mean
 TrtSmmryTbl <- dlply(RngMean, .(variable), function(x) CreateTable(x, fac = "co2",  digit = 4, nsmall = 4))
