@@ -27,7 +27,7 @@ qqline(residuals(Fml))
 # Determine how many days to go back from the sampling dates to calculate soil
 # variables
 m1 <- LmrAicComp(ListDF = LstDF_SoilVar, 
-                 formula = formula(log(gluco.act) ~ co2 * (log(Moist) + Temp_Mean) + 
+                 formula = formula(log(nag.act) ~ co2 * (log(Moist) + Temp_Mean) + 
                                      (1|block) + (1|ring) + (1|id)))
 
 aicDF <- m1$AICdf
@@ -39,16 +39,16 @@ df <- m1$Data
 ## check linearity agains soil variables
 
 # plot against soil varriable
-scatterplotMatrix(~ log(gluco.act) + log(Moist) + Temp_Mean, diag = "boxplot", df)
+scatterplotMatrix(~ log(nag.act) + log(Moist) + Temp_Mean, diag = "boxplot", df)
 
 # what if I use soil moisture at day of sampling
-M.fmoist <- lmer(log(gluco.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) + (1|ring) + (1|id), data = df)
+M.fmoist <- lmer(log(nag.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) + (1|ring) + (1|id), data = df)
 AIC(M.fmoist)
 # no difference, so just use this as it's simpler
 
 # plot for each plot against soil variables
-print(xyplot(log(gluco.act) ~ log(moisture) | ring + plot, m1$Data, type = c("r", "p")))
-print(xyplot(log(gluco.act) ~ Temp_Mean | ring + plot, m1$Data, type = c("r", "p")))
+print(xyplot(log(nag.act) ~ log(moisture) | ring + plot, m1$Data, type = c("r", "p")))
+print(xyplot(log(nag.act) ~ Temp_Mean | ring + plot, m1$Data, type = c("r", "p")))
 # looks fine
 
 ## Analysis
@@ -61,13 +61,13 @@ Anova(Iml_ancv)
 # Fml_ancv <- stepLmer(Iml_ancv)
 
 # for some reasons stepLmer doesn't work with this so manually remove ns factors
-m2 <- lmer(log(gluco.act) ~ co2 * log(moisture) + Temp_Mean + 
+m2 <- lmer(log(nag.act) ~ co2 * log(moisture) + Temp_Mean + 
              (1|block) + (1|ring) + (1|id), data = df)
-m3 <- lmer(log(gluco.act) ~ co2 + log(moisture) + Temp_Mean + 
+m3 <- lmer(log(nag.act) ~ co2 + log(moisture) + Temp_Mean + 
              (1|block) + (1|ring) + (1|id), data = df)
-m4 <- lmer(log(gluco.act) ~ co2 + log(moisture) + 
+m4 <- lmer(log(nag.act) ~ co2 + log(moisture) + 
              (1|block) + (1|ring) + (1|id), data = df)
-m5 <- lmer(log(gluco.act) ~ log(moisture) + 
+m5 <- lmer(log(nag.act) ~ log(moisture) + 
              (1|block) + (1|ring) + (1|id), data = df)
 anova(Iml_ancv, m2, m3, m4, m5)
 
