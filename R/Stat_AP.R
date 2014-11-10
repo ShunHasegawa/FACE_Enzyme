@@ -90,6 +90,7 @@ Fml_ancv <- m5
 Anova(Fml_ancv)
 AnvF_ancv_AP <- Anova(Fml_ancv, test.statistic = "F")
 AnvF_ancv_AP
+rsquared.glmm(Fml_ancv)
 
 plot(allEffects(Fml_ancv))
 plot(Fml_ancv)
