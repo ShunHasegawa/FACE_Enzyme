@@ -395,3 +395,8 @@ LmrAicComp <- function(ListDF, formula){
   Iml <- lmer(formula, data = df)
   return(list("Initial" = Iml, "Data" = df, "AICdf" = aicDF))
 }
+
+###################################
+# Compute square R value for GLMM #
+###################################
+source("R/rsquaredglmm.R")
