@@ -91,7 +91,7 @@ Fml_ancv <- m3
 Anova(Fml_ancv)
 AnvF_ancv_CBH <- Anova(Fml_ancv, test.statistic = "F")
 AnvF_ancv_CBH
-rsquared.glmm(Fml_ancv)
+r2_CBH <- rsquared.glmm(Fml_ancv)
 
 plot(allEffects(Fml_ancv))
 plot(Fml_ancv)
