@@ -47,9 +47,19 @@ M.fmoist <- lmer(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) 
 AIC(M.fmoist)
 # this is slightly better than above, so use this
 
+# what about soil temperature for this moisutre
+m2 <- LmrAicComp(ListDF = LstDF_SoilVar, 
+                 formula = formula(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + 
+                                     (1|block) + (1|ring) + (1|id)))
+
+aicDF2 <- m2$AICdf
+aicDF2[which(aicDF2$AICs == min(aicDF2$AICs)), ]
+# improved so use this period for temperature
+df2 <- m2$Data
+
 # plot for each plot against soil variables
-print(xyplot(log(cello.act) ~ log(moisture) | ring + plot, m1$Data, type = c("r", "p")))
-print(xyplot(log(cello.act) ~ Temp_Mean | ring + plot, m1$Data, type = c("r", "p")))
+print(xyplot(log(cello.act) ~ log(moisture) | ring + plot, df2, type = c("r", "p")))
+print(xyplot(log(cello.act) ~ Temp_Mean | ring + plot, df2, type = c("r", "p")))
 # looks fine
 
 ## Analysis
