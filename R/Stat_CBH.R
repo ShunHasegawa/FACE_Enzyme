@@ -2,10 +2,10 @@
 # CO2 x Time #
 ##############
 bxplts(value = "cello.act", data = enzy)
-  # use sqrt transormation
+  # use log transormation
 
 # The initial model is
-Iml <- lmer(sqrt(cello.act) ~ co2 * time + (1|block) + (1|ring) + (1|id), 
+Iml <- lmer(log(cello.act) ~ co2 * time + (1|block) + (1|ring) + (1|id), 
             data = enzy)
 Anova(Iml)
 
