@@ -25,41 +25,49 @@ qqline(residuals(Fml))
 # CO2 x Moist x Temp #
 ######################
 
-# Determine how many days to go back from the sampling dates to calculate soil
-# variables
-m1 <- LmrAicComp(ListDF = LstDF_SoilVar, 
-                 formula = formula(log(cello.act) ~ co2 * (log(Moist) + Temp_Mean) + 
-                                     (1|block) + (1|ring) + (1|id)))
+# Determine how many days to go back from the sampling dates to calculate soil 
+# variables-> it's determined and save as
+# "Output//Data//FACE_Enzyme_FreshSoilWC_90dTemp.RData"
 
-aicDF <- m1$AICdf
-aicDF[which(aicDF$AICs == min(aicDF$AICs)), ]
-
-# 2-day gives the lowest AIC
-df <- m1$Data
-
-## check linearity agains soil variables
-
-# plot against soil varriable
-scatterplotMatrix(~ log(cello.act) + log(Moist) + Temp_Mean, diag = "boxplot", df)
-
-# what if I use soil moisture at day of sampling
-M.fmoist <- lmer(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) + (1|ring) + (1|id), data = df)
-AIC(M.fmoist)
-# this is slightly better than above, so use this
-
-# what about soil temperature for this moisutre
-m2 <- LmrAicComp(ListDF = LstDF_SoilVar, 
-                 formula = formula(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + 
-                                     (1|block) + (1|ring) + (1|id)))
-
-aicDF2 <- m2$AICdf
-aicDF2[which(aicDF2$AICs == min(aicDF2$AICs)), ]
-# improved so use this period for temperature
-df2 <- m2$Data
-
-# plot for each plot against soil variables
-print(xyplot(log(cello.act) ~ log(moisture) | ring + plot, df2, type = c("r", "p")))
-print(xyplot(log(cello.act) ~ Temp_Mean | ring + plot, df2, type = c("r", "p")))
+# m1 <- LmrAicComp(ListDF = LstDF_SoilVar, 
+#                  formula = formula(log(cello.act) ~ co2 * (log(Moist) + Temp_Mean) + 
+#                                      (1|block) + (1|ring) + (1|id)))
+# 
+# aicDF <- m1$AICdf
+# aicDF[which(aicDF$AICs == min(aicDF$AICs)), ]
+# 
+# # 2-day gives the lowest AIC
+# df <- m1$Data
+# 
+# ## check linearity agains soil variables
+# 
+# # plot against soil varriable
+# scatterplotMatrix(~ log(cello.act) + log(Moist) + Temp_Mean, diag = "boxplot", df)
+# 
+# # what if I use soil moisture at day of sampling
+# M.fmoist <- lmer(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) + (1|ring) + (1|id), data = df)
+# AIC(M.fmoist)
+# # this is slightly better than above, so use this
+# 
+# # what about soil temperature for this moisutre
+# m2 <- LmrAicComp(ListDF = LstDF_SoilVar, 
+#                  formula = formula(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + 
+#                                      (1|block) + (1|ring) + (1|id)))
+# 
+# aicDF2 <- m2$AICdf
+# aicDF2[which(aicDF2$AICs == min(aicDF2$AICs)), ]
+# # improved so use this period for temperature
+# df2 <- m2$Data
+# 
+# #  soil moisture at the time of sampling best represent enayme activity. given 
+# #  that soil moiasuter, 90-day temperature mean showed the smallest AIC for
+# #  other enzymes. so use this as soil temperature
+# save(df2, file = "Output/Data/FACE_Enzyme_FreshSoilWC_90dTemp.RData")
+# 
+# 
+# # plot for each plot against soil variables
+# print(xyplot(log(cello.act) ~ log(moisture) | ring + plot, df2, type = c("r", "p")))
+# print(xyplot(log(cello.act) ~ Temp_Mean | ring + plot, df2, type = c("r", "p")))
 # looks fine
 
 ## Analysis
