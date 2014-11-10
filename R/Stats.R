@@ -40,9 +40,6 @@ load("Output/Data/LstDF_SoilVar.RData")
 #  this as soil temperature
 load("Output/Data//FACE_Enzyme_FreshSoilWC_90dTemp.RData")
 
-
-
-
 #######
 # CBH #
 #######
@@ -66,6 +63,17 @@ source("R/Stat_AP.R")
 #######################
 # Summary Stats table #
 #######################
+AnvF_ancv_CBH
+r2_CBH
+
+AnvF_ancv_BG
+r2_BG
+
+AnvF_ancv_NAG
+r2_NAG
+
+AnvF_ancv_AP
+r2_AP
 
 ################
 ## CO2 x Time ##
