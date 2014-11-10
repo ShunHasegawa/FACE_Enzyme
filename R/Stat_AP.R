@@ -12,8 +12,8 @@ Anova(Iml)
 # The final model is
 Fml <- stepLmer(Iml)
 Anova(Fml)
-AnvF_NAG <- Anova(Fml, test.statistic = "F")
-AnvF_NAG
+AnvF_AP <- Anova(Fml, test.statistic = "F")
+AnvF_AP
 
 # model diagnosis
 plot(Fml)
