@@ -31,6 +31,18 @@ names(LstDF_SoilVar) <- seq(0, 90, 1)
 save(LstDF_SoilVar, file =  "Output/Data/LstDF_SoilVar.RData")
 load("Output/Data/LstDF_SoilVar.RData")
 
+############
+# Analysis #
+############
+
+#  Soil moisture at the time of sampling best represent enayme activity. give
+#  that soil moiasuter, 90-day temperature mean showed the smallest AIC. so use
+#  this as soil temperature
+load("Output/Data//FACE_Enzyme_FreshSoilWC_90dTemp.RData")
+
+
+
+
 #######
 # CBH #
 #######
