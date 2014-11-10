@@ -29,6 +29,18 @@ soil <- read.table("Data//FACE_enzyme_SoilVar.txt", header = T, colClasses = c("
 # merge soil variable with plot mean enzyme data
 enzy <- merge(enzy, soil, by.x = c("dates", "ring", "plot"), by.y = c("date", "ring", "plot"))
 
+# add block and id
+enzy <- within(enzy, {
+  block <- recode(ring, "c(1, 2) = 'A'; c(3, 4) = 'B'; c(5, 6) = 'C'")
+  id <- factor(ring:plot)
+  time <- factor(dates, levels = c("sep12", "dec12", "mar13", "jun13"), 
+                 labels = c(1:4))
+})
+
+# save
+save(enzy, file = "Output//Data/FACE_Enzyme.RData")
+load("Output//Data/FACE_Enzyme.RData")
+
 #######################
 # Summary excel table #
 #######################
