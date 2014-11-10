@@ -35,11 +35,12 @@ ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, hei
 # Fig for publication #
 #######################
 # define graphic background
-science_theme <- theme(panel.grid.major = element_line(size = 0.2, color = "grey"), 
+science_theme <- theme(panel.grid.major = element_blank(), 
+                       panel.grid.minor = element_blank(), 
                        axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1),
-                       legend.position = c(.9, .9), 
+                       legend.position = c(.9, .91),
+#                        legend.text = element_text(size = 2),
                        legend.title = element_blank())
-
 
 # change labels
 vars <- c("CBH", "BG", "NAG", "AP")
@@ -54,9 +55,23 @@ subLabDF <- data.frame(xv = as.Date("2012-08-15"),
                        labels = LETTERS[1:length(levels(df$variable))],
                        co2 = "amb")
 
+# create data frame for stat summary table
+## determine ylength
+ylengthDF <- ddply(df, .(variable), summarise,
+                   ylength = max(Mean + SE) - min(Mean - SE),
+                   ymax = max(Mean + SE))
+
+# df for stat table
+statDF <- StatPositionDF(StatRes = Stat_CO2Time, 
+                         variable = levels(df$variable), 
+                         ytop = c(ylengthDF$ymax[1], 0.46, ylengthDF$ymax[3:4]),
+                         ylength = ylengthDF$ylength,
+                         gap = .06)
+
+# create a plot
 p <- ggplot(df, aes(x = Date, y = Mean, group = co2))
 
-p2 <- p + geom_line(aes(linetype = co2)) + 
+p2 <- p + geom_line(aes(linetype = co2), position = position_dodge(20)) + 
   geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
                 width = 15, size = .3,
                 position = position_dodge(20)) + 
@@ -66,7 +81,7 @@ p2 <- p + geom_line(aes(linetype = co2)) +
              linetype = "dashed", col = "black") +
   scale_x_date(breaks= date_breaks("2 month"),
                labels = date_format("%b-%y"), 
-               limits = c(as.Date("2012-08-15"), as.Date("2013-06-15"))) +
+               limits = c(as.Date("2012-08-15"), as.Date("2013-07-15"))) +
   scale_shape_manual(values = c(24, 21), labels = c("Ambient", expression(eCO[2]))) +
   scale_fill_manual(values = c("black", "white"), 
                     labels = c("Ambient", expression(eCO[2]))) +
@@ -76,10 +91,18 @@ p2 <- p + geom_line(aes(linetype = co2)) +
             fontface = "bold",
             data = subLabDF) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y") +
-  science_theme
-ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", plot = p2, 
-         width = 6, height = 5)
+  science_theme +
+  geom_text(data = subset(statDF, predictor != ""), 
+            aes(x = as.Date("2013-6-1"), y = yval, label = predictor),
+            size = 2, hjust = 1, parse = TRUE) +
+  # unless remove "" with predictor != "", labels will be messed up due to
+  # this empty level
+  geom_text(data = statDF, 
+            aes(x = as.Date("2013-7-1"), y = yval, label = p), 
+            size = 2, parse = TRUE)
 
+ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", 
+         plot = p2, width = 6, height =5)
 
 #########################################
 # plot regression agianst soil moisture #
@@ -90,7 +113,7 @@ l_ply(1:4, function(x) ggsavePP(filename = fls[x], plot = RegFg[[x]], width = 6,
 
 pl <- pltReg(enzMlt) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
-ggsavePP(filename = "output//figs/FACE_Enzyme_RgreMoist", plot = pl, width = 6, height = 4)
+ggsavePP(filename = "output//figs/FACE_Enzyme_RgreMoist", plot = pl, width = 3, height = 4)
 
 
 
