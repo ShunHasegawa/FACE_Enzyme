@@ -23,12 +23,12 @@ TdrSoil <- subsetD(FACE_TDR_ProbeDF, Sample == "soil")
 # resulted data frames in a sigle list
 
 # Actual values
-LstDF_SoilVar <- llply(seq(0, 90, 1), 
-                       function(x) SoilVarPeriMean(data = subsetD(enzy, time != "1"),
-                                                   period = x, SoilData = TdrSoil), 
-                       .progress = "text")
-names(LstDF_SoilVar) <- seq(0, 90, 1)
-save(LstDF_SoilVar, file =  "Output/Data/LstDF_SoilVar.RData")
+# LstDF_SoilVar <- llply(seq(0, 90, 1), 
+#                        function(x) SoilVarPeriMean(data = subsetD(enzy, time != "1"),
+#                                                    period = x, SoilData = TdrSoil), 
+#                        .progress = "text")
+# names(LstDF_SoilVar) <- seq(0, 90, 1)
+# save(LstDF_SoilVar, file =  "Output/Data/LstDF_SoilVar.RData")
 load("Output/Data/LstDF_SoilVar.RData")
 
 ############
