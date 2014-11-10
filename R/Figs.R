@@ -3,8 +3,8 @@ theme_set(theme_bw()) # graphic backgroud is white
 ######################
 # summary data frame #
 ######################
-RngMean <- ddply(enzMlt, .(Date, co2, ring, variable), Crt_SmryDF) 
-TrtMean <- ddply(RngMean, .(Date, co2, variable), function(x) Crt_SmryDF(x, val = "Mean"))
+RngMean <- ddply(enzMlt, .(date, co2, ring, variable), Crt_SmryDF) 
+TrtMean <- ddply(RngMean, .(date, co2, variable), function(x) Crt_SmryDF(x, val = "Mean"))
 
 #################################
 # plot each nutrient separately #
@@ -70,7 +70,7 @@ statDF <- StatPositionDF(StatRes = Stat_CO2Time,
                          gap = .06)
 
 # create a plot
-p <- ggplot(df, aes(x = Date, y = Mean, group = co2))
+p <- ggplot(df, aes(x = date, y = Mean, group = co2))
 
 p2 <- p + geom_line(aes(linetype = co2), position = position_dodge(20)) + 
   geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
@@ -114,9 +114,4 @@ l_ply(1:4, function(x) ggsavePP(filename = fls[x], plot = RegFg[[x]], width = 6,
 
 pl <- pltReg(enzMlt) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
-ggsavePP(filename = "output//figs/FACE_Enzyme_RgreMoist", plot = pl, width = 3, height = 4)
-
-
-
-
-
+ggsavePP(filename = "output//figs/FACE_Enzyme_RgreMoist", plot = pl, width = 6, height = 4)
