@@ -62,6 +62,7 @@ ylengthDF <- ddply(df, .(variable), summarise,
                    ymax = max(Mean + SE))
 
 # df for stat table
+load("Output//Data//CO2Time_Stat.RData")
 statDF <- StatPositionDF(StatRes = Stat_CO2Time, 
                          variable = levels(df$variable), 
                          ytop = c(ylengthDF$ymax[1], 0.46, ylengthDF$ymax[3:4]),
