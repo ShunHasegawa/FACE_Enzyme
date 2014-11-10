@@ -400,3 +400,14 @@ LmrAicComp <- function(ListDF, formula){
 # Compute square R value for GLMM #
 ###################################
 source("R/rsquaredglmm.R")
+
+#######################################
+# Excel sheet for Summary Stats table #
+#######################################
+CrSheetAnvTbl <- function(workbook, sheetName, smmaryLst){
+  sheet <- createSheet(workbook, sheetName = sheetName)
+  addDataFrame(data.frame("ANOVA_F"), sheet, col.names = FALSE, row.names = FALSE)
+  addDataFrame(smmaryLst[[sheetName]], sheet, showNA = FALSE, 
+               row.names = TRUE, characterNA="NA",
+               startRow = 2)
+}

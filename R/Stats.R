@@ -63,17 +63,24 @@ source("R/Stat_AP.R")
 #######################
 # Summary Stats table #
 #######################
-AnvF_ancv_CBH
-r2_CBH
 
-AnvF_ancv_BG
-r2_BG
+########################
+## CO2 x Moist x Temp ##
+########################
 
-AnvF_ancv_NAG
-r2_NAG
+# create summary list for LMM with soil variable
+StatSmmryLst <- list("CBH" = AnvF_ancv_CBH,
+                     "BG" = AnvF_ancv_BG,
+                     "NAG" = AnvF_ancv_NAG,
+                     "AP" = AnvF_ancv_AP)
 
-AnvF_ancv_AP
-r2_AP
+# save in a single excel file
+wb <- createWorkbook()
+l_ply(c("CBH", "BG", "NAG", "AP"), 
+      function(x) CrSheetAnvTbl(workbook = wb, 
+                                sheetName = x, 
+                                smmaryLst = StatSmmryLst))
+saveWorkbook(wb, "Output/Table//FACE_Enzyme_Ancv.xlsx")
 
 ################
 ## CO2 x Time ##
