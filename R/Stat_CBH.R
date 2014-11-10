@@ -65,7 +65,8 @@ print(xyplot(log(cello.act) ~ Temp_Mean | ring + plot, df2, type = c("r", "p")))
 ## Analysis
 
 # The initial model is
-Iml_ancv <- M.fmoist
+Iml_ancv <- lmer(log(cello.act) ~ co2 * (log(moisture) + Temp_Mean) + 
+                   (1|block) + (1|ring) + (1|id), data = df2)
 Anova(Iml_ancv)
 
 # The final models
@@ -73,9 +74,9 @@ Anova(Iml_ancv)
 
 # for some reasons stepLmer doesn't work with this so manually remove ns factors
 m2 <- lmer(log(cello.act) ~ co2 * log(moisture) + Temp_Mean + 
-             (1|block) + (1|ring) + (1|id), data = df)
+             (1|block) + (1|ring) + (1|id), data = df2)
 m3 <- lmer(log(cello.act) ~ co2 * log(moisture) + 
-             (1|block) + (1|ring) + (1|id), data = df)
+             (1|block) + (1|ring) + (1|id), data = df2)
 anova(Iml_ancv, m2, m3)
 
 Fml_ancv <- m3

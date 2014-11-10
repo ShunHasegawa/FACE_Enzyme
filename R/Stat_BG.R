@@ -46,15 +46,27 @@ M.fmoist <- lmer(log(gluco.act) ~ co2 * (log(moisture) + Temp_Mean) + (1|block) 
 AIC(M.fmoist)
 # no difference, so just use this as it's simpler
 
+# what about soil temperature for this moisutre
+m2 <- LmrAicComp(ListDF = LstDF_SoilVar, 
+                 formula = formula(log(gluco.act) ~ co2 * (log(moisture) + Temp_Mean) + 
+                                     (1|block) + (1|ring) + (1|id)))
+
+aicDF2 <- m2$AICdf
+aicDF2[which(aicDF2$AICs == min(aicDF2$AICs)), ]
+# improved so use this period for temperature
+df2 <- m2$Data
+
+
 # plot for each plot against soil variables
-print(xyplot(log(gluco.act) ~ log(moisture) | ring + plot, m1$Data, type = c("r", "p")))
-print(xyplot(log(gluco.act) ~ Temp_Mean | ring + plot, m1$Data, type = c("r", "p")))
+print(xyplot(log(gluco.act) ~ log(moisture) | ring + plot, df2, type = c("r", "p")))
+print(xyplot(log(gluco.act) ~ Temp_Mean | ring + plot, df2, type = c("r", "p")))
 # looks fine
 
 ## Analysis
 
 # The initial model is
-Iml_ancv <- M.fmoist
+Iml_ancv <- lmer(log(gluco.act) ~ co2 * (log(moisture) + Temp_Mean) + 
+                   (1|block) + (1|ring) + (1|id), data = df2)
 Anova(Iml_ancv)
 
 # The final models
@@ -62,16 +74,16 @@ Anova(Iml_ancv)
 
 # for some reasons stepLmer doesn't work with this so manually remove ns factors
 m2 <- lmer(log(gluco.act) ~ co2 * log(moisture) + Temp_Mean + 
-             (1|block) + (1|ring) + (1|id), data = df)
-m3 <- lmer(log(gluco.act) ~ co2 + log(moisture) + Temp_Mean + 
-             (1|block) + (1|ring) + (1|id), data = df)
-m4 <- lmer(log(gluco.act) ~ co2 + log(moisture) + 
-             (1|block) + (1|ring) + (1|id), data = df)
-m5 <- lmer(log(gluco.act) ~ log(moisture) + 
-             (1|block) + (1|ring) + (1|id), data = df)
-anova(Iml_ancv, m2, m3, m4, m5)
+             (1|block) + (1|ring) + (1|id), data = df2)
 
-Fml_ancv <- m5
+m3 <- lmer(log(gluco.act) ~ co2 + log(moisture) + Temp_Mean + 
+             (1|block) + (1|ring) + (1|id), data = df2)
+
+m4 <- lmer(log(gluco.act) ~ log(moisture) + Temp_Mean + 
+             (1|block) + (1|ring) + (1|id), data = df2)
+anova(Iml_ancv, m2, m3, m4)
+
+Fml_ancv <- m4
 Anova(Fml_ancv)
 AnvF_ancv_BG <- Anova(Fml_ancv, test.statistic = "F")
 AnvF_ancv_BG
