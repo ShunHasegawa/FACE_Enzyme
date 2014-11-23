@@ -69,9 +69,12 @@ PltMean <- function(data, ...){
   
   p <- ggplot(data, aes_string(x = "date", y = "Mean", ...))
   
-  p2 <- p + geom_line(size = 1) + 
-    geom_errorbar(aes_string(ymin = "Mean - SE", ymax = "Mean + SE", ...), width = 5) + 
-    labs(x = "Time", y = ylab) +
+  p2 <- p + geom_line(size = 1, position = position_dodge(10), alpha = .8) + 
+    geom_errorbar(aes_string(ymin = "Mean - SE", ymax = "Mean + SE", ...), 
+                  width = 15,
+                  position = position_dodge(10), 
+                  alpha = .8) + 
+    labs(x = "Month", y = ylab) +
     geom_vline(xintercept = as.numeric(as.Date("2012-09-18")), 
                linetype = "dashed", 
                col = "black") +
