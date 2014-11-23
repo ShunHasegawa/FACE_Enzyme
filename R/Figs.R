@@ -31,8 +31,6 @@ pl <- PltCO2Mean(TrtMean) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
 ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, height = 4)
 
-
-
 ################
 ## for poster ##
 ################
@@ -65,7 +63,8 @@ poster_theme <- theme(panel.grid.major = element_blank(),
                                                  size = 13),
                       legend.position = "non",
                       axis.title.y = element_text(size = 15),
-                      plot.title = element_text(size = 25, face = "bold"))
+                      plot.title = element_text(size = 25, face = "bold"),
+                      strip.text = element_text(size =15))
 
 
 ylabs <- c(expression(beta*-D*-Cellobiohydrolase),
