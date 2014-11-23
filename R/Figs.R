@@ -31,6 +31,60 @@ pl <- PltCO2Mean(TrtMean) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y")
 ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, height = 4)
 
+
+
+################
+## for poster ##
+################
+
+facet_wrap_labeller <- function(gg.plot,labels=NULL) {
+  #works with R 3.0.1 and ggplot2 0.9.3.1
+  # copied from http://stackoverflow.com/questions/19282897/
+  # how-to-add-expressions-to-labels-in-facet-wrap
+  # require(gridExtra)
+  
+  g <- ggplotGrob(gg.plot)
+  gg <- g$grobs      
+  strips <- grep("strip_t", names(gg))
+  
+  for(ii in seq_along(labels))  {
+    modgrob <- getGrob(gg[[strips[ii]]], "strip.text", 
+                       grep=TRUE, global=TRUE)
+    gg[[strips[ii]]]$children[[modgrob$name]] <- editGrob(modgrob,label=labels[ii])
+  }
+  
+  g$grobs <- gg
+  class(g) = c("arrange", "ggplot",class(g)) 
+  g
+}
+
+
+poster_theme <- theme(panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      axis.text.x = element_text(angle=45, vjust= 1, hjust = 1, 
+                                                 size = 13),
+                      legend.position = "non",
+                      axis.title.y = element_text(size = 15),
+                      plot.title = element_text(size = 25, face = "bold"))
+
+
+ylabs <- c(expression(beta*-D*-Cellobiohydrolase),
+           expression(beta*-Glucosidase), 
+           expression(N*-acetylglucosaminidase),
+           expression(Acid~phosphatase))
+
+pl  <- PltCO2Mean(TrtMean) +
+  facet_wrap(~ variable, ncol = 2, scales= "free_y") +
+  ggtitle("Extracellular enzyme activity") +
+  labs(x = NULL)+
+  poster_theme
+pl <- facet_wrap_labeller(pl, labels = ylabs)
+ggsavePP(filename = "output//figs/GSBI_Poster/FACE_CO2_enzyme", plot = pl, width = 6, height = 5)
+
+
+
+
+
 #######################
 # Fig for publication #
 #######################
