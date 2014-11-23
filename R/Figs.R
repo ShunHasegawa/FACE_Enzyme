@@ -41,7 +41,7 @@ facet_wrap_labeller <- function(gg.plot,labels=NULL) {
   #works with R 3.0.1 and ggplot2 0.9.3.1
   # copied from http://stackoverflow.com/questions/19282897/
   # how-to-add-expressions-to-labels-in-facet-wrap
-  # require(gridExtra)
+  require(gridExtra)
   
   g <- ggplotGrob(gg.plot)
   gg <- g$grobs      
