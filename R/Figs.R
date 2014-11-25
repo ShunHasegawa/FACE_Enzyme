@@ -67,7 +67,7 @@ poster_theme <- theme(panel.grid.major = element_blank(),
                       strip.text = element_text(size =15))
 
 
-ylabs <- c(expression(beta*-D*-Cellobiohydrolase),
+ylabs <- c(expression(beta*-scriptstyle(D)*-Cellobiohydrolase),
            expression(beta*-Glucosidase), 
            expression(N*-acetylglucosaminidase),
            expression(Acid~phosphatase))
