@@ -64,7 +64,7 @@ poster_theme <- theme(panel.grid.major = element_blank(),
                       legend.position = "non",
                       axis.title.y = element_text(size = 15),
                       plot.title = element_text(size = 25, face = "bold"),
-                      strip.text = element_text(size =15))
+                      strip.text = element_text(size =14))
 
 
 ylabs <- c(expression(beta*-scriptstyle(D)*-Cellobiohydrolase),
