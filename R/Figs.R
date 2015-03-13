@@ -38,9 +38,10 @@ ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, hei
 science_theme <- theme(panel.grid.major = element_blank(), 
                        panel.grid.minor = element_blank(), 
                        axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1),
-                       legend.position = c(.9, .91),
-#                        legend.text = element_text(size = 2),
-                       legend.title = element_blank())
+                       legend.position = c(.88, .91),
+                       legend.title = element_blank(),
+                       legend.key = element_blank(),
+                       legend.key.width = unit(2, "lines"))
 
 # change labels
 vars <- c("CBH", "BG", "NAG", "AP")
