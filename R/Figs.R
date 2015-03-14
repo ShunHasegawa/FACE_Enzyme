@@ -35,9 +35,12 @@ ggsavePP(filename = "output//figs/FACE_Enzyme_CO2Trt", plot = pl, width = 6, hei
 # Fig for publication #
 #######################
 # define graphic background
-science_theme <- theme(panel.grid.major = element_blank(), 
+science_theme <- theme(panel.border = element_rect(color = "black"),
+                       panel.grid.major = element_blank(), 
                        panel.grid.minor = element_blank(), 
                        axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1),
+                       axis.ticks.length = unit(-.2, "lines"),
+                       axis.ticks.margin = unit(.5, "lines"),
                        legend.position = c(.88, .91),
                        legend.title = element_blank(),
                        legend.key = element_blank(),
@@ -51,9 +54,10 @@ df$variable <- factor(df$variable,
                       labels = vars)
 
 # create data frame for fig sub labels
-subLabDF <- data.frame(xv = as.Date("2012-08-15"),
+subLabDF <- data.frame(xv = as.Date("2012-08-20"),
                        ddply(df, .(variable), summarise, yv = max(Mean + SE)),
-                       labels = LETTERS[1:length(levels(df$variable))],
+                       labels = paste("(", letters[1:length(levels(df$variable))], ")",
+                                       sep = ""),
                        co2 = "amb")
 
 # create data frame for stat summary table
@@ -81,7 +85,7 @@ p2 <- p + geom_line(aes(linetype = co2), position = position_dodge(20)) +
   labs(x = "Month", y = expression(Potential~enzyme~activity~(mu*mol~h^"-1"~g^"-1"))) +
   geom_vline(xintercept = as.numeric(as.Date("2012-09-18")), 
              linetype = "dashed", col = "black") +
-  scale_x_date(breaks= date_breaks("2 month"),
+  scale_x_date(breaks= date_breaks("3 month"),
                labels = date_format("%b-%y"), 
                limits = c(as.Date("2012-08-15"), as.Date("2013-07-15"))) +
   scale_shape_manual(values = c(24, 21), labels = c("Ambient", expression(eCO[2]))) +
