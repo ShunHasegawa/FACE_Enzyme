@@ -108,7 +108,7 @@ p2 <- p +
             size = 3, parse = TRUE)
 
 ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", 
-         plot = p2, width = 6, height =5)
+         plot = p2, width = 6.65, height = 5)
 
 #########################################
 # plot regression agianst soil moisture #
