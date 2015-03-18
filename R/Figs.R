@@ -41,10 +41,11 @@ science_theme <- theme(panel.border = element_rect(color = "black"),
                        axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1),
                        axis.ticks.length = unit(-.2, "lines"),
                        axis.ticks.margin = unit(.5, "lines"),
+                       axis.line = element_line(size = unit(.25, "mm")),
                        legend.position = c(.88, .91),
                        legend.title = element_blank(),
                        legend.key = element_blank(),
-                       legend.key.width = unit(2, "lines"))
+                       legend.key.width = unit(2.5, "lines"))
 
 # change labels
 vars <- c("CBH", "BG", "NAG", "AP")
@@ -70,21 +71,21 @@ ylengthDF <- ddply(df, .(variable), summarise,
 load("Output//Data//CO2Time_Stat.RData")
 statDF <- StatPositionDF(StatRes = Stat_CO2Time, 
                          variable = levels(df$variable), 
-                         ytop = c(ylengthDF$ymax[1], 0.46, ylengthDF$ymax[3:4]),
+                         ytop = c(ylengthDF$ymax[1], 0.53, ylengthDF$ymax[3:4]),
                          ylength = ylengthDF$ylength,
-                         gap = .06)
+                         gap = .08)
 
 # create a plot
 p <- ggplot(df, aes(x = date, y = Mean, group = co2))
 
-p2 <- p + geom_line(aes(linetype = co2), position = position_dodge(20)) + 
-  geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), 
-                width = 15, size = .3,
-                position = position_dodge(20)) + 
-  geom_point(aes(fill = co2), shape = 21, position = position_dodge(20)) +
-  labs(x = "Month", y = expression(Potential~enzyme~activity~(mu*mol~h^"-1"~g^"-1"))) +
+p2 <- p + 
   geom_vline(xintercept = as.numeric(as.Date("2012-09-18")), 
              linetype = "dashed", col = "black") +
+  geom_line(aes(linetype = co2), position = position_dodge(20)) + 
+  geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE), width = 0, 
+              position = position_dodge(20)) + 
+  geom_point(aes(fill = co2), shape = 21, position = position_dodge(20), size = 4) +
+  labs(x = "Month", y = expression(Potential~enzyme~activity~(mu*mol~h^"-1"~g^"-1"))) +
   scale_x_date(breaks= date_breaks("3 month"),
                labels = date_format("%b-%y"), 
                limits = c(as.Date("2012-08-15"), as.Date("2013-07-15"))) +
@@ -98,13 +99,13 @@ p2 <- p + geom_line(aes(linetype = co2), position = position_dodge(20)) +
   facet_wrap(~ variable, ncol = 2, scales= "free_y") +
   science_theme +
   geom_text(data = subset(statDF, predictor != ""), 
-            aes(x = as.Date("2013-6-1"), y = yval, label = predictor),
-            size = 2, hjust = 1, parse = TRUE) +
+            aes(x = as.Date("2013-5-15"), y = yval, label = predictor),
+            size = 3, hjust = 1, parse = TRUE) +
   # unless remove "" with predictor != "", labels will be messed up due to
   # this empty level
   geom_text(data = statDF, 
-            aes(x = as.Date("2013-7-1"), y = yval, label = p), 
-            size = 2, parse = TRUE)
+            aes(x = as.Date("2013-6-28"), y = yval, label = p), 
+            size = 3, parse = TRUE)
 
 ggsavePP(filename = "Output//Figs//FACE_Manuscript/FACE_Enzyme", 
          plot = p2, width = 6, height =5)
