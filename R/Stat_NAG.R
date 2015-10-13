@@ -5,9 +5,14 @@ bxplts(value = "nag.act", data = enzy)
 # use log transormation
 
 # The initial model is
+Iml <- lmer(log(nag.act) ~ co2 + (1|block) + (1|ring), 
+            data = enzy, subset = time == 1)
+Anova(Iml, test.statistic = "F")
+
+
 Iml <- lmer(log(nag.act) ~ co2 * time + (1|block) + (1|ring) + (1|id), 
-            data = enzy)
-Anova(Iml)
+            data = enzy, subset = time != 1)
+Anova(Iml, test.statistic = "F")
 
 # The final model is
 Fml <- stepLmer(Iml)

@@ -5,8 +5,12 @@ bxplts(value = "gluco.act", data = enzy)
 # use log transormation
 
 # The initial model is
+Iml <- lmer(log(gluco.act) ~ co2 + (1|block) + (1|ring), 
+            data = enzy, subset = time == 1)
+Anova(Iml)
+
 Iml <- lmer(log(gluco.act) ~ co2 * time + (1|block) + (1|ring) + (1|id), 
-            data = enzy)
+            data = enzy, subset = time != 1)
 Anova(Iml)
 
 # The final model is
